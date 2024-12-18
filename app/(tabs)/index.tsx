@@ -1,74 +1,130 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { Text, View, TextInput, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import home from '../../components/homepage';
 
 export default function HomeScreen() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const router = useRouter();
+
+  const handleLogin = () => {
+    try {
+      if (!email && !password) {
+        throw new Error('Email and Password are required');
+      }
+      if (!email) {
+        throw new Error('Email is required');
+      }
+      if (!password) {
+        throw new Error('Password is required');
+      }
+      // Navigate to homepage
+      
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('An unknown error occurred');
+      }
+      console.log("Failed to login");
+      return;
+    }
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <View style={styles.container}>
+      <Image
+        source={require('../../assets/images/transport.jpg')}
+        style={styles.image}
+      />
+      <Text style={styles.title}>YAMAN MACHAN</Text>
+      <View style= {styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+      </View>
+      <View style={styles.signupContainer}>
+        <View>
+          <Text style={styles.signupText}>Don't have an account?</Text>
+        </View>
+          <TouchableOpacity>
+            <Text style={styles.signupButton}>Sign up</Text>
+          </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    marginTop: 25,
+  },
+  inputContainer: {
+    marginHorizontal: 8,
+  },
+  title: {
+    textAlign: 'center',
+    fontSize: 25,
+    marginBottom: 15,
+    fontFamily: 'monospace',
+    fontWeight: 'bold',
+    color: '#f8650c',
+  },
+  input: {
+    width: '100%',
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  button: {
+    width: '100%',
+    padding: 12,
+    backgroundColor: '#f8650c',
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  image: {
+    width: '100%',
+    maxHeight: 370,
+    marginBottom: 20,
+  },
+  signupContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+    marginTop: 15,
+    marginHorizontal: 9,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  signupText: {
+    fontSize: 13,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  signupButton: {
+    fontSize: 12,
+    color: '#f8650c',
+    marginLeft: 5,
   },
 });
