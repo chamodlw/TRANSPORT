@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Text, View, TextInput, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import home from '../../components/homepage';
+import homepage from '../../components/homepage';
 
 export default function HomeScreen() {
   const [email, setEmail] = useState('');
@@ -11,27 +11,28 @@ export default function HomeScreen() {
 
   const handleLogin = () => {
     try {
-      if (!email && !password) {
-        throw new Error('Email and Password are required');
-      }
-      if (!email) {
-        throw new Error('Email is required');
-      }
-      if (!password) {
-        throw new Error('Password is required');
-      }
-      // Navigate to homepage
-      
+        if (!email && !password) {
+            throw new Error('Email and Password are required');
+        }
+        if (!email) {
+            throw new Error('Email is required');
+        }
+        if (!password) {
+            throw new Error('Password is required');
+        }
+        // Navigate to homepage
+        router.push('/homepage');
     } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-      } else {
-        alert('An unknown error occurred');
-      }
-      console.log("Failed to login");
-      return;
+        if (error instanceof Error) {
+            alert(error.message);
+        } else {
+            alert('An unknown error occurred');
+        }
+        console.log("Failed to login");
+        return;
     }
-  };
+};
+
 
   return (
     <View style={styles.container}>
