@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'expo-router';
 import { View, Text, StyleSheet, Button, TextInput ,Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -104,7 +105,21 @@ export default function Homepage() {
             return `${time} s`;
         }
     };
+    const router = useRouter();
 
+    const goToMap = () => {
+        // Navigate to homepage
+        router.push({
+            pathname: '/map',
+            params: {
+            startLong: startLong,
+            startLang: startLang,
+            endLong: endLong,
+            endLang: endLang,
+            },
+        });
+
+    };
     return (
         <View style={styles.container}>
             {/* Back Button */}
@@ -142,7 +157,7 @@ export default function Homepage() {
                 </View>
                 <View style={styles.button}>
                 <Button
-                    title="Get Directions"
+                    title="Distance & Time"
                     onPress={getDirections}
                     color="#84391A" // Customize button color
                     />
@@ -166,7 +181,7 @@ export default function Homepage() {
                 <View style={styles.button}>
                 <Button
                     title="Go to Map ➔"
-                    onPress={getDirections}
+                    onPress={goToMap}
                     color="#84391A" // Customize button color
                     />
                 </View>
@@ -185,7 +200,7 @@ const styles = StyleSheet.create({
     image: {
         alignSelf: 'center',
         marginBottom: 30,
-        marginTop: 50,
+        marginTop: 160,
         maxHeight: 220,
         maxWidth: 220,
     },
@@ -197,18 +212,23 @@ const styles = StyleSheet.create({
         left: 20, // Position the back button at the top-left corner
     },
     text: {
-        fontSize: 18,
+        fontSize: 22,
+        fontWeight: 'bold',
         color: '#333',
         textAlign: 'center',
+        textShadowColor: '#84391A', // Add stroke
+        textShadowOffset: { width: 1, height: 1 }, // Add stroke
+        textShadowRadius: 1, // Add stroke
     },
     texts: {
         marginTop: 10,
+        marginBottom: 10,
     },
     input: {
         width: '100%',
         padding: 12,
         borderWidth: 1,
-        borderColor: '#ccc',
+        borderColor: '#84391A',
         borderRadius: 8,
         marginBottom: 16,
     },
