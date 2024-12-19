@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Button, TextInput ,Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 export default function Homepage() {
@@ -8,10 +8,12 @@ export default function Homepage() {
     const [loading, setLoading] = useState(false);
     const [length, setLength] = useState(null);
     const [time, setTime] = useState(null);
-    const [startLong, setStartLong] = useState(-122.4194);
-    const [startLang, setStartLang] = useState(37.7749);
-    const [endLong, setEndLong] = useState(-118.2437);
-    const [endLang, setEndLang] = useState(34.0522);
+    const [startLong, setStartLong] = useState(0);
+    const [startLang, setStartLang] = useState(0);
+    const [endLong, setEndLong] = useState(0);
+    const [endLang, setEndLang] = useState(0);
+    const [startName, setStartName] = useState('');
+    const [endName, setEndName] = useState('');
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
@@ -23,11 +25,32 @@ export default function Homepage() {
         navigation.goBack(); // Navigates to the previous screen
     };
     
-    const handleLanLong = (townName) => {
+    const handleLanLong = () => {
         //passing town name set to langtitute and longtitude
         const apiKey2 = '5b3ce3597851110001cf62480a979bf9a9b44fb08610d2e36c393870';
-        const uri2 = `https://api.openrouteservice.org/geocode/search?api_key=${apiKey2}&text=${townName}`;
-    }
+        const uri2 = `https://api.openrouteservice.org/geocode/search?api_key=${apiKey2}&text=${startName}`;
+        const uri3 = `https://api.openrouteservice.org/geocode/search?api_key=${apiKey2}&text=${endName}`;
+        fetch(uri2)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(startName + "Data fetched");
+                setStartLang(data.features[0].geometry.coordinates[1]);
+                setStartLong(data.features[0].geometry.coordinates[0]);
+            })
+            .catch((error) => {
+                console.error('Error fetching directions:', error);
+            });
+        fetch(uri3)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(endName + "Data fetched");
+                setEndLang(data.features[0].geometry.coordinates[1]);
+                setEndLong(data.features[0].geometry.coordinates[0]);
+            })
+        .catch((error) => {
+            console.error('Error fetching directions:', error);
+        });
+};
 
     const getDirections = async () => {
         setLoading(true);
@@ -40,7 +63,7 @@ export default function Homepage() {
         try {
             const response = await fetch(url);
             const data = await response.json();
-            console.log(data); // Log the data to check the response structure
+            console.log(startName+" to "+endName+ " Data fetched"); // Log the data to check the response structure
     
             if (data.features && data.features.length > 0) {
                 // Extract geometry or properties from the first feature
@@ -89,47 +112,64 @@ export default function Homepage() {
                 <Button
                     title="Back"
                     onPress={handleBackPress}
-                    color="#f8650c" // Customize button color
+                    color="#84391A" // Customize button color
                 />
+                
             </View>
             <View style={styles.body}>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter start town"
-                value=''
-                onChangeText={(text) => handleLanLong(parseFloat(text))}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Enter end town"
-                onChangeText={(text) => handleLanLong(parseFloat(text))}
-            />
-            <Button
-                title="handleLanLong"
-                onPress={handleLanLong}
-                color="#f8650c" // Customize button color
-            />
-            <Button
-                title="Get Directions"
-                onPress={getDirections}
-                color="#f8650c" // Customize button color
+                <Image
+                    source={require('../assets/images/transport-circled.png')}
+                    style={styles.image}
                 />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter start town"
+                    value={startName}
+                    onChangeText={(text) => setStartName(text)}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter end town"
+                    value={endName}
+                    onChangeText={(text) => setEndName(text)}
+                />
+                <View style={styles.button}>
+                <Button
+                    title="Confirm"
+                    onPress={() => handleLanLong()}
+                    color="#84391A" // Customize button color
+                />
+                </View>
+                <View style={styles.button}>
+                <Button
+                    title="Get Directions"
+                    onPress={getDirections}
+                    color="#84391A" // Customize button color
+                    />
+                </View>
                 {loading ? (
                     <Text>Loading directions...</Text>
                 ) : (
-                    <View>
+                    <View style={styles.texts}>
                         <View>
                             <Text style={styles.text}>
-                                Distance is {length !== null ? checkDistance(length) : 'N/A'}
+                                {length !== null ? 'Distance is ' + checkDistance(length) : ''}
                             </Text>
                         </View>
                         <View>
                             <Text style={styles.text}>
-                                Time is {time !== null ? checkTime(time) : 'N/A'}
+                                 {time !== null ?'Time is ' + checkTime(time) : ''}
                             </Text>
                         </View>
                     </View>
                 )}
+                <View style={styles.button}>
+                <Button
+                    title="Go to Map ➔"
+                    onPress={getDirections}
+                    color="#84391A" // Customize button color
+                    />
+                </View>
             </View>
         </View>
     );
@@ -142,6 +182,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 20,
     },
+    image: {
+        alignSelf: 'center',
+        marginBottom: 30,
+        marginTop: 50,
+        maxHeight: 220,
+        maxWidth: 220,
+    },
     body: {
     },
     backButtonContainer: {
@@ -152,6 +199,10 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 18,
         color: '#333',
+        textAlign: 'center',
+    },
+    texts: {
+        marginTop: 10,
     },
     input: {
         width: '100%',
@@ -161,4 +212,9 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginBottom: 16,
     },
+    button:{
+        marginVertical: 8,
+        backgroundColor: '#ffffff',
+    }
 });
+

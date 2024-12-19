@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontFamily: 'monospace',
     fontWeight: 'bold',
-    color: '#f8650c',
+    color: '#84391A',
   },
   input: {
     width: '100%',
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     padding: 12,
-    backgroundColor: '#f8650c',
+    backgroundColor: '#84391A',
     borderRadius: 8,
   },
   buttonText: {
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
   signupButton: {
     fontSize: 12,
-    color: '#f8650c',
+    color: '#84391A',
     marginLeft: 5,
   },
 });
