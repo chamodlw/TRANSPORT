@@ -19,7 +19,7 @@ export default function MapDirections() {
         setLoading(true);
         const startCoordinates = [parseFloat(startLong), parseFloat(startLang)];
         const endCoordinates = [parseFloat(endLong), parseFloat(endLang)];
-        console.log(startCoordinates, endCoordinates);
+        console.log("before get direc"+ startCoordinates, endCoordinates);
     
         const apiKey = '5b3ce3597851110001cf62480a979bf9a9b44fb08610d2e36c393870'; // Replace with your OpenRouteService API key
         const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${startCoordinates[0]},${startCoordinates[1]}&end=${endCoordinates[0]},${endCoordinates[1]}`;
